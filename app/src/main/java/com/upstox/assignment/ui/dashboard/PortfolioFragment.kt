@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
-import com.upstox.assignment.databinding.FragmentDashboardBinding
+import com.upstox.assignment.databinding.FragmentPortfolioBinding
 
-class DashboardFragment : Fragment() {
+class PortfolioFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentPortfolioBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentPortfolioBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,8 +29,8 @@ class DashboardFragment : Fragment() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Tab 1"
-                1 -> "Tab 2"
+                0 -> "Positions"
+                1 -> "Holdings"
                 else -> null
             }
         }.attach()
