@@ -1,4 +1,4 @@
-package com.upstox.assignment.ui.dashboard
+package com.upstox.assignment.ui.portfolio
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

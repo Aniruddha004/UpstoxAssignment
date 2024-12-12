@@ -1,4 +1,4 @@
-package com.upstox.assignment.ui.dashboard
+package com.upstox.assignment.ui.portfolio
 
 import android.os.Bundle
 import android.view.LayoutInflater

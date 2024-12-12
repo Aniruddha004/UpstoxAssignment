@@ -1,4 +1,4 @@
-package com.upstox.assignment.ui.dashboard
+package com.upstox.assignment.ui.portfolio
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
