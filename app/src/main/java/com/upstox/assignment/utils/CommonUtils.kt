@@ -1,14 +1,17 @@
 package com.upstox.assignment.utils
 
-import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import java.text.DecimalFormat
 
 internal fun Double.roundOffDecimal(): String {
     val df = DecimalFormat("######.00")
+    return df.format(this)
+}
+
+internal fun Double.toDecimal2(): String {
+    val df = DecimalFormat("##,##,##,##,##0.00")
     return df.format(this)
 }
 

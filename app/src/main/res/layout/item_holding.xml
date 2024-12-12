@@ -10,97 +10,115 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-        <!-- Stock Symbol -->
-        <TextView
-            android:id="@+id/symbol"
-            android:layout_width="0dp"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ASHOKLEY"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ltpText" />
-
-        <!-- LTP Label -->
-        <TextView
-            android:id="@+id/ltpText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LTP: "
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ltp"
-            app:layout_constraintBottom_toBottomOf="@+id/symbol" />
-
-        <!-- LTP Value -->
-        <TextView
-            android:id="@+id/ltp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="₹ 119.10"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="@+id/symbol"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- NET QTY Label -->
-        <TextView
-            android:id="@+id/netQuantityText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NET QTY: "
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/symbol" />
-
-        <!-- NET QTY Value -->
-        <TextView
-            android:id="@+id/quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3"
-            android:textSize="14sp"
-            android:layout_marginStart="4dp"
-            app:layout_constraintStart_toEndOf="@+id/netQuantityText"
-            app:layout_constraintTop_toTopOf="@+id/netQuantityText"
-            app:layout_constraintBottom_toBottomOf="@+id/netQuantityText" />
-
-        <!-- P&L Label -->
-        <TextView
-            android:id="@+id/profitLossText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="P&amp;L: "
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintTop_toTopOf="@+id/quantity"
-            app:layout_constraintEnd_toStartOf="@+id/pnl" />
-
-        <!-- P&L Value -->
-        <TextView
-            android:id="@+id/pnl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="₹ 12.90"
-            android:textSize="14sp"
-            android:textColor="@android:color/holo_green_dark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/netQuantityText" />
+            app:layout_constraintBottom_toTopOf="@+id/divider">
+
+            <!-- Stock Symbol -->
+            <TextView
+                android:id="@+id/symbol"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="ASHOKLEY"
+                android:textSize="16sp"
+                android:textColor="@color/grey_text_dark"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ltpText" />
+
+            <!-- LTP Label -->
+            <TextView
+                android:id="@+id/ltpText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LTP: "
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintTop_toTopOf="@+id/symbol"
+                app:layout_constraintEnd_toStartOf="@+id/ltp"
+                app:layout_constraintBottom_toBottomOf="@+id/symbol" />
+
+            <!-- LTP Value -->
+            <TextView
+                android:id="@+id/ltp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 119.10"
+                android:textSize="14sp"
+                android:textColor="@color/grey_text_dark"
+                app:layout_constraintTop_toTopOf="@+id/symbol"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/symbol"/>
+
+            <!-- NET QTY Label -->
+            <TextView
+                android:id="@+id/netQuantityText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NET QTY: "
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/symbol" />
+
+            <!-- NET QTY Value -->
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textSize="14sp"
+                android:textColor="@color/grey_text_dark"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/netQuantityText"
+                app:layout_constraintTop_toTopOf="@+id/netQuantityText"
+                app:layout_constraintBottom_toBottomOf="@+id/netQuantityText" />
+
+            <!-- P&L Label -->
+            <TextView
+                android:id="@+id/profitLossText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P&amp;L: "
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintTop_toTopOf="@+id/netQuantityText"
+                app:layout_constraintEnd_toStartOf="@+id/pnl"
+                app:layout_constraintBottom_toBottomOf="@+id/netQuantityText"/>
+
+            <!-- P&L Value -->
+            <TextView
+                android:id="@+id/pnl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 12.90"
+                android:textSize="14sp"
+                android:textColor="@android:color/holo_green_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/netQuantityText"
+                app:layout_constraintBottom_toBottomOf="@+id/netQuantityText"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Divider -->
         <View
+            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
             android:background="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@+id/netQuantityText"
+            app:layout_constraintTop_toBottomOf="@+id/item_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

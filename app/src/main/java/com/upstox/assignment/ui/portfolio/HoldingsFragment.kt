@@ -15,14 +15,15 @@ import com.upstox.assignment.ui.adapter.HoldingsAdapter
 import com.upstox.assignment.ui.viewmodel.HoldingsViewModel
 import com.upstox.assignment.ui.viewmodel.HoldingsViewModelFactory
 import com.upstox.assignment.utils.isOnline
-import com.upstox.assignment.utils.roundOffDecimal
+import com.upstox.assignment.utils.toDecimal2
 import kotlin.math.absoluteValue
 
 class HoldingsFragment : Fragment() {
 
     private var _binding: FragmentHoldingsBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
     private lateinit var viewModel: HoldingsViewModel
+    lateinit var viewModelFactory: HoldingsViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,61 +36,96 @@ class HoldingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this, HoldingsViewModelFactory()).get(HoldingsViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, HoldingsViewModelFactory()).get(HoldingsViewModel::class.java)
 
-        if(isOnline(requireActivity())){
+        if (isOnline(requireActivity())) {
             binding.progressBar.visibility = View.VISIBLE
 
             viewModel.holdings.observe(viewLifecycleOwner) { holdingsResponse ->
                 Log.d("HoldingsFragment", "Holdings: $holdingsResponse")
-                binding.progressBar.visibility = View.GONE
-                val adapter = HoldingsAdapter(holdingsResponse.data.userHolding)
-                binding.recyclerView.layoutManager = LinearLayoutManager(context)
-                binding.recyclerView.adapter = adapter
+                if (holdingsResponse != null) {
+                    binding.progressBar.visibility = View.GONE
+                    val adapter = HoldingsAdapter(holdingsResponse)
+                    binding.recyclerView.layoutManager = LinearLayoutManager(context)
+                    binding.recyclerView.adapter = adapter
 
-                val totalInvestment = holdingsResponse.data.userHolding.sumOf { it.quantity * it.avgPrice }
-                val currentValue = holdingsResponse.data.userHolding.sumOf { it.quantity * it.ltp }
-                val totalPnl = currentValue - totalInvestment
-
-                // Set total PNL to TextView
-                if(totalPnl>0.0){
-                    binding.cardStrip.cardPnlValue.text = "${getString(R.string.rupee_symbol_c3)} ${totalPnl.roundOffDecimal()}"
-                    binding.cardStrip.cardPnlValue.setTextColor(resources.getColor(R.color.green))
-                }
-                else {
-                    binding.cardStrip.cardPnlValue.text = "-${getString(R.string.rupee_symbol_c3)} ${totalPnl.absoluteValue.roundOffDecimal()}"
-                    binding.cardStrip.cardPnlValue.setTextColor(resources.getColor(R.color.red))
-                }
-
-                var isCardOpen = false
-                binding.cardStrip.root.setOnClickListener {
-                    if(!isCardOpen){
-                        binding.cardStrip.layoutTotalValues.visibility = View.VISIBLE
-                        binding.cardStrip.cardIcon.setImageDrawable(context?.resources?.getDrawable(R.drawable.ic_arrow_down))
-                        binding.cardStrip.totalInvestment.text = holdingsResponse.data.userHolding.sumOf{it.avgPrice*it.quantity}.roundOffDecimal().toString()
-                        binding.cardStrip.currentValue.text = holdingsResponse.data.userHolding.sumOf{it.ltp*it.quantity}.roundOffDecimal().toString()
-                        val daysPnl = holdingsResponse.data.userHolding.sumOf { (it.close-it.ltp)*it.quantity }.absoluteValue.roundOffDecimal()
-                        if(daysPnl.toDouble() > 0.0){
-                            binding.cardStrip.daysPnL.text = "${getString(R.string.rupee_symbol_c3)} $daysPnl"
-                            binding.cardStrip.daysPnL.setTextColor(resources.getColor(R.color.green))
+                    viewModel.calculatePnl(holdingsResponse) { pnlData ->
+                        // Set total PNL to TextView
+                        val totalPnl = pnlData["totalPnl"]!!.toDouble()
+                        if (totalPnl > 0.0) {
+                            binding.cardStrip.cardPnlValue.text =
+                                "${getString(R.string.rupee_symbol_c3)} ${totalPnl.toDecimal2()}"
+                            binding.cardStrip.cardPnlValue.setTextColor(resources.getColor(R.color.green))
+                        } else {
+                            binding.cardStrip.cardPnlValue.text =
+                                "-${getString(R.string.rupee_symbol_c3)} ${totalPnl.absoluteValue.toDecimal2()}"
+                            binding.cardStrip.cardPnlValue.setTextColor(resources.getColor(R.color.red))
                         }
-                        else {
-                            binding.cardStrip.daysPnL.text = "- ${getString(R.string.rupee_symbol_c3)} ${daysPnl}"
-                            binding.cardStrip.daysPnL.setTextColor(resources.getColor(R.color.red))
-                        }
-                        isCardOpen = true
-                    }
-                    else {
-                        binding.cardStrip.layoutTotalValues.visibility = View.GONE
-                        binding.cardStrip.cardIcon.setImageDrawable(context?.resources?.getDrawable(R.drawable.ic_arrow_up))
-                        isCardOpen = false
-                    }
-                }
 
+                        var isCardOpen = false
+                        binding.cardStrip.root.setOnClickListener {
+                            if (!isCardOpen) {
+                                binding.cardStrip.layoutTotalValues.visibility = View.VISIBLE
+                                binding.cardStrip.cardIcon.setImageDrawable(
+                                    context?.resources?.getDrawable(
+                                        R.drawable.ic_arrow_down
+                                    )
+                                )
+                                binding.cardStrip.totalInvestment.text = buildString {
+                                    append(getString(R.string.rupee_symbol_c3))
+                                    append(" ")
+                                    append(pnlData["totalInvestment"])
+                                }
+                                binding.cardStrip.currentValue.text = buildString {
+                                    append(getString(R.string.rupee_symbol_c3))
+                                    append(" ")
+                                    append(pnlData["currentValue"])
+                                }
+                                val daysPnl = pnlData["daysPnl"]!!.toDouble()
+                                if (daysPnl > 0.0) {
+                                    binding.cardStrip.daysPnL.text = buildString {
+                                        append(getString(R.string.rupee_symbol_c3))
+                                        append(" ")
+                                        append(daysPnl.toDecimal2())
+                                    }
+                                    binding.cardStrip.daysPnL.setTextColor(resources.getColor(R.color.green))
+                                } else {
+                                    binding.cardStrip.daysPnL.text =
+                                        buildString {
+                                            append("- ")
+                                            append(getString(R.string.rupee_symbol_c3))
+                                            append(" ")
+                                            append(daysPnl.absoluteValue.toDecimal2())
+                                        }
+                                    binding.cardStrip.daysPnL.setTextColor(resources.getColor(R.color.red))
+                                }
+                                isCardOpen = true
+                            } else {
+                                binding.cardStrip.layoutTotalValues.visibility = View.GONE
+                                binding.cardStrip.cardIcon.setImageDrawable(
+                                    context?.resources?.getDrawable(
+                                        R.drawable.ic_arrow_up
+                                    )
+                                )
+                                isCardOpen = false
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Something went wrong. Please try again later.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-        }
-        else {
-            Toast.makeText(requireActivity(), "Please check your internet connection.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(
+                requireActivity(),
+                "Please check your internet connection.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
