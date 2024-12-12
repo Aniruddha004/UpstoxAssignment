@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.fragment.testing)
     testImplementation(libs.junit)
-    testImplementation(libs.robolectric)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
