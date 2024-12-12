@@ -7,9 +7,9 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import java.text.DecimalFormat
 
-internal fun Double.roundOffDecimal(): Double {
+internal fun Double.roundOffDecimal(): String {
     val df = DecimalFormat("######.00")
-    return df.format(this).toDouble()
+    return df.format(this)
 }
 
 internal fun isOnline(context: Context): Boolean {

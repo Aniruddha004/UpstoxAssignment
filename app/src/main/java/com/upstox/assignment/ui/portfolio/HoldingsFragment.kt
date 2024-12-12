@@ -58,8 +58,34 @@ class HoldingsFragment : Fragment() {
                 }
                 else {
                     binding.cardStrip.cardPnlValue.text = "-${getString(R.string.rupee_symbol_c3)} ${totalPnl.absoluteValue.roundOffDecimal()}"
-                    binding.cardStrip.cardPnlValue.setTextColor(resources.getColor(R.color.green))
+                    binding.cardStrip.cardPnlValue.setTextColor(resources.getColor(R.color.red))
                 }
+
+                var isCardOpen = false
+                binding.cardStrip.root.setOnClickListener {
+                    if(!isCardOpen){
+                        binding.cardStrip.layoutTotalValues.visibility = View.VISIBLE
+                        binding.cardStrip.cardIcon.setImageDrawable(context?.resources?.getDrawable(R.drawable.ic_arrow_down))
+                        binding.cardStrip.totalInvestment.text = holdingsResponse.data.userHolding.sumOf{it.avgPrice*it.quantity}.roundOffDecimal().toString()
+                        binding.cardStrip.currentValue.text = holdingsResponse.data.userHolding.sumOf{it.ltp*it.quantity}.roundOffDecimal().toString()
+                        val daysPnl = holdingsResponse.data.userHolding.sumOf { (it.close-it.ltp)*it.quantity }.absoluteValue.roundOffDecimal()
+                        if(daysPnl.toDouble() > 0.0){
+                            binding.cardStrip.daysPnL.text = "${getString(R.string.rupee_symbol_c3)} $daysPnl"
+                            binding.cardStrip.daysPnL.setTextColor(resources.getColor(R.color.green))
+                        }
+                        else {
+                            binding.cardStrip.daysPnL.text = "- ${getString(R.string.rupee_symbol_c3)} ${daysPnl}"
+                            binding.cardStrip.daysPnL.setTextColor(resources.getColor(R.color.red))
+                        }
+                        isCardOpen = true
+                    }
+                    else {
+                        binding.cardStrip.layoutTotalValues.visibility = View.GONE
+                        binding.cardStrip.cardIcon.setImageDrawable(context?.resources?.getDrawable(R.drawable.ic_arrow_up))
+                        isCardOpen = false
+                    }
+                }
+
             }
         }
         else {

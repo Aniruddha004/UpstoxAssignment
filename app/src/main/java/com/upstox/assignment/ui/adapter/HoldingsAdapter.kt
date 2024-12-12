@@ -24,11 +24,11 @@ class HoldingsAdapter(private val holdings: List<Holding>) : RecyclerView.Adapte
 
     class HoldingViewHolder(private val binding: ItemHoldingBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(holding: Holding) {
-            val pnl = holding.quantity * ( holding.ltp - holding.avgPrice)
+            val pnl = (holding.quantity * ( holding.ltp - holding.avgPrice)).absoluteValue
             binding.symbol.text = holding.symbol
             binding.quantity.text = holding.quantity.toString()
-            binding.ltp.text = "${binding.root.context.getString(R.string.rupee_symbol_c3)} ${holding.ltp.toString()}"
-            if(pnl>0.0){
+            binding.ltp.text = "${binding.root.context.getString(R.string.rupee_symbol_c3)} ${holding.ltp}"
+            if(pnl > 0.00){
                 binding.pnl.text = "${binding.root.context.getString(R.string.rupee_symbol_c3)} ${pnl.roundOffDecimal()}"
                 binding.pnl.setTextColor(binding.root.context.resources.getColor(R.color.green))
             } else {
